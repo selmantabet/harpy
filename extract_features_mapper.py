@@ -6,7 +6,7 @@
 #
 # [CODE]
 #
-# - The interval time is now defined by a variable, all output CSVs will include the interval time in their names.hat
+# - The interval time is now defined by a variable, all output CSVs will include the interval time in their names.
 # - The app directiory is now defined by a variable, installation across different platforms is now easier by redefining the app path.
 # - A bug resulting in the overestimation of the number of servers (num_servers) per CSV entry has been fixed.
 #
