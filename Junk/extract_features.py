@@ -1,27 +1,10 @@
-# HARPY Joy JSON Feature Extraction V3
-#
-# Designed by: Selman Tabet
-#
-# Changelog:
-#
-# [CODE]
-#
-# - The interval time is now defined by a variable, all output CSVs will include the interval time in their names.
-# - The app directiory is now defined by a variable, installation across different platforms is now easier by redefining the app path.
-# - A bug resulting in the overestimation of the number of servers (num_servers) per CSV entry has been fixed.
-#
-# [FEATURES]
-#
-# - Added WHOIS record retrieval feature.
-#  ~ An additional CSV column consisting of a dictionary of unique ASN IDs and their corresponding counts is now included in the output.
-#
+# V2: Using more features
 
 import json
 import datetime
 import csv
 import sys
-import pandas as pd
-from ipwhois import IPWhois
+
 '''
 Features List:
 -------------
@@ -51,16 +34,10 @@ NTP interval: total time for using NTP
 3- Add an extension to the input file name to indicate the period such as _1Min, _10Min, and so on.
 4- Make sure only one day_co loop out of the 3 loops is commented out (1-21 for 2016, 21-48 for 2018, 1-48 for all)
 '''
-
-interval_time = 7 #Time in minutes
-
-print("Selected time interval: " + str(interval_time))
-period_time = 60 * interval_time  # seconds
+period_time = 60 * 60  # seconds
 
 # Prepare writer to write extracted features for device_co
-#app_directory = '/home/chaos/Desktop/iot' #Re-define this for each installation
-app_directory = 'D:/OneDrive/Work/University (BSc)/HBKU/Final Year Project/CPEG 411 - Final Year Project II/repo/HARPY/' #VS Installation
-features_file_name = app_directory + '/csv_files/unsw_dataset_features_'+ str(interval_time) + 'm.csv'
+features_file_name = '/home/shadha/Dropbox/Development/IoT/csv_files/features_2016_60Min.csv'
 #features_file_name = '/home/shadha/Dropbox/Development/IoT/csv_files/features_2018_60Min.csv'
 #features_file_name = '/home/shadha/Dropbox/Development/IoT/csv_files/features_all_60Min.csv'
 #stats_file_name = '/mnt/36b434f8-0c0f-4a09-9e0d-abc7ddcd8e82/IoT_Datasetcsv_files/stats.csv'
@@ -68,19 +45,17 @@ features_file_name = app_directory + '/csv_files/unsw_dataset_features_'+ str(in
 features_csv = open(features_file_name, 'w')
 features_writer = csv.writer(features_csv, delimiter=',')
 
-features_writer.writerow(['total_sleep_time', 'total_active_time', 'total_flow_volume', 'flow_rate', 'avg_packet_size', 'num_servers', 'num_protocols', 'uniq_dns', 'dns_interval', 'ntp_interval', 'device_co', 'rdap_asn'])
+features_writer.writerow(['total_sleep_time', 'total_active_time', 'total_flow_volume', 'flow_rate', 'avg_packet_size', 'num_servers', 'num_protocols', 'uniq_dns', 'dns_interval', 'ntp_interval', 'device_co'])
 overall_ports_dict = {}
 overall_dns_dict = {}
-whois_record = {}
 
-for device_co in range(1, 32):    
+for device_co in range(1, 25):    
     # Process all days for device_co
-    #for day_co in range(1, 6):
     for day_co in range(1, 21):     # for 2016 dataset
     #for day_co in range(21, 48):   # for 2018 dataset
     #for day_co in range(1, 48):    # for 2016+2018 dataset
         # Read flows from flows file containing 1 day data
-        flows_file_name = app_directory + '/json_files/' + str(day_co) + '_' + str(device_co) + '.json'
+        flows_file_name = '/home/shadha/json_files/' + str(day_co) + '_' + str(device_co) + '.json'
         print('Processing ' + flows_file_name + ' ...')
         flows_file = open(flows_file_name, 'r')
         flows = flows_file.readlines()
@@ -94,7 +69,6 @@ for device_co in range(1, 32):
         total_packets = 0
 
         servers_dic = {}
-        rdap_asn_record = {"Not Resolved":0}
         ports_dic = {}
         dns_query_dic = {}
 
@@ -153,27 +127,13 @@ for device_co in range(1, 32):
                     dns_interval += cur_total_seconds
                 elif port == 123:
                     ntp_interval += cur_total_seconds
-
-            # Get the server and WHOIS Record
+            # Get the server
             if port != 53 and port != 123:
                 server = flow_data['da']
-                if server not in whois_record:
-                    try:
-                        ip_query = IPWhois(server)
-                        RDAP = ip_query.lookup_rdap(depth=1)
-                        server_id = RDAP["asn_description"]
-                        whois_record[server] = server_id
-                    except:
-                        server_id = "Not Resolved"
-                else:
-                    server_id = whois_record[server]
-
                 if server not in servers_dic:
-                    rdap_asn_record[server_id] = 1
                     servers_dic[server] = 1
                 else:
                     servers_dic[server] += 1
-                    rdap_asn_record[server_id] += 1
                     
             # Get DNS query
             if 'dns' in flow_data:
@@ -218,17 +178,15 @@ for device_co in range(1, 32):
                     avg_packet_size = 0
                     if total_packets > 0:
                         avg_packet_size = total_flow_volume / total_packets
-
                     # Save features
-                    features_writer.writerow([total_sleep_time, total_active_time, total_flow_volume, flow_rate, avg_packet_size, len(servers_dic), len(ports_dic), len(dns_query_dic), dns_interval, ntp_interval, device_co, rdap_asn_record])
+                    features_writer.writerow([total_sleep_time, total_active_time, total_flow_volume, flow_rate, avg_packet_size, len(servers_dic), len(ports_dic), len(dns_query_dic), dns_interval, ntp_interval, device_co])
                     
                     # Reinitialize features
                     total_sleep_time = 0
                     total_active_time = 0
                     total_flow_volume = 0
                     total_packets = 0
-                    servers_dic = {}
-                    rdap_asn_record = {"Not Resolved":0}
+                    serverss_dic = {}
                     ports_dic = {}
                     dns_query_dic = {}
                     dns_interval = 0
@@ -240,12 +198,6 @@ for device_co in range(1, 32):
 
 
 features_csv.close()
-print("Mapping MACs...")
-mac_source = pd.read_csv(app_directory + '/csv_files/ListCSV.csv')
-mapping = pd.read_csv(app_directory + '/csv_files/unsw_dataset_features_'+ str(interval_time) + 'm.csv')
-mapped = mapping.merge(mac_source, on='device_co', how='left').rename(columns={'MAC Address':'MAC_address'})
-mapped.to_csv(app_directory + "/csv_files/unsw_dataset_features_mapped_"+ str(interval_time) + "m.csv",index=False)
-print("Done.")
 '''
 stats_csv = open(stats_file_name, 'w')
 stats_writer = csv.writer(stats_csv, delimiter=',')

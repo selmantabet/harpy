@@ -22,17 +22,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Junk\extract_features.py" />
+    <Compile Include="Junk\extract_features_mapper_10.py" />
+    <Compile Include="Junk\extract_features_mapper_15.py" />
+    <Compile Include="Junk\extract_features_mapper_30.py" />
     <Compile Include="extract_features.py" />
-    <Compile Include="extract_features_mapper_10.py" />
-    <Compile Include="extract_features_mapper_15.py" />
-    <Compile Include="extract_features_mapper_30.py" />
-    <Compile Include="extract_features_mapper.py" />
-    <Compile Include="extract_features_mapper_5.py" />
+    <Compile Include="Junk\extract_features_mapper_5.py" />
     <Compile Include="IPWhoIsTest.py" />
     <Compile Include="argTest.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HARPY.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="extract_featuresV3.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -46,6 +49,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Junk\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
