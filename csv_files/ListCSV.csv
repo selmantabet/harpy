@@ -1,0 +1,32 @@
+Device Name,MAC Address,Connection Type,Device Type,device_co
+Smart Things,"				d0:52:a8:00:67:5e ","	Wired",Hub,1
+Amazon Echo,"			44:65:0d:56:cc:d3 ","	Wireless",Hub,2
+Netatmo Welcome,"		70:ee:50:18:34:43 ","	Wireless",Hub,3
+TP-Link Day Night Cloud camera,"	f4:f2:6d:93:51:f1 ","	Wireless",Camera,4
+Samsung SmartCam,"			00:16:6c:ab:6b:88 ","	Wireless",Camera,5
+Dropcam,"			30:8c:fb:2f:e4:b2 ","	Wireless",Camera,6
+Insteon Camera,"			00:62:6e:51:27:2e","	Wired ",Camera,7
+Insteon Camera,"			e8:ab:fa:19:de:4f ","	Wireless",Camera,8
+Withings Smart Baby Monitor,"	00:24:e4:11:18:a8 ","	Wired",Camera,9
+Belkin Wemo switch,"		ec:1a:59:79:f4:89 ","	Wireless",Appliance,10
+TP-Link Smart plug,"		50:c7:bf:00:56:39 ","	Wireless",Appliance,11
+iHome,"	74:c6:3b:29:d7:1d ","	Wireless",Hub,12
+Belkin wemo motion sensor,"	ec:1a:59:83:28:11 ","	Wireless",Sensor,13
+NEST Protect smoke alarm,"	18:b4:30:25:be:e4","	Wireless",Sensor,14
+Netatmo weather station,"	70:ee:50:03:b8:ac ","	Wireless",Sensor,15
+Withings Smart scale,"	00:24:e4:1b:6f:96 ","	Wireless",Misc,16
+Blipcare Blood Pressure meter,"	74:6a:89:00:2e:25 ","	Wireless",Sensor,17
+Withings Aura smart sleep sensor,"	00:24:e4:20:28:c6 ","	Wireless",Sensor,18
+Light Bulbs LiFX Smart Bulb,"	d0:73:d5:01:83:08 ","	Wireless",Appliance,19
+Triby Speaker,"	18:b7:9e:02:20:44 ","	Wireless",Misc,20
+PIX-STAR Photo-frame,"	e0:76:d0:33:bb:85 ","	Wireless",Misc,21
+HP Printer,"	70:5a:0f:e4:9b:c0 ","	Wireless",Misc,22
+Samsung Galaxy Tab,"	08:21:ef:3b:fc:e3","	Wireless",Computer,23
+Nest Dropcam,"	30:8c:fb:b6:ea:45","	Wireless",Camera,24
+Android Phone,"	40:f3:08:ff:1e:da","	Wireless",Computer,25
+Laptop,"	74:2f:68:81:69:42","	Wireless",Computer,26
+MacBook,"	ac:bc:32:d4:6f:2f","	Wireless",Computer,27
+Android Phone,"	b4:ce:f6:a7:a3:c2","	Wireless",Computer,28
+iPhone,"	d0:a6:37:df:a1:e1","	Wireless",Computer,29
+MacBook/iPhone,"	f4:5c:89:93:cc:85","	Wireless",Computer,30
+TPLink Router Bridge LAN (Gateway),"	14:cc:20:51:33:ea",,,31
