@@ -69,8 +69,6 @@ def extract_features(path, interval_time): # Installation path and and integer i
         # Process all days for device_co
         #for day_co in range(1, 6):
         for day_co in range(1, 21):     # for 2016 dataset
-        #for day_co in range(21, 48):   # for 2018 dataset
-        #for day_co in range(1, 48):    # for 2016+2018 dataset
             # Read flows from flows file containing 1 day data
             flows_file_name = os.path.join(app_directory, 'json_files', str(day_co) + '_' + str(device_co) + '.json')
             print('Processing ' + flows_file_name + ' ...')
