@@ -11,6 +11,9 @@ parser.add_argument('-l', action='store', type = str, default = os.path.join(dir
 parser.add_argument('-o', action='store', type = str, default = os.path.join(dir_path, "csv_files"), dest='parsed_output', help='Output Path')
 args = parser.parse_args()
 
+print("HARPY Path: " + args.parsed_path)
+print("ListCSV.csv Directory: " + args.parsed_MAClist)
+print("Output Path: " + args.parsed_output)
 
 extract.mac_map(args.parsed_MAClist, extract.extract_features(args.parsed_path, args.parsed_interval), args.parsed_output)
 

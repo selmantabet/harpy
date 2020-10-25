@@ -29,13 +29,16 @@
     <Compile Include="extract_features.py" />
     <Compile Include="Junk\extract_features_mapper_5.py" />
     <Compile Include="IPWhoIsTest.py" />
-    <Compile Include="argTest.py">
+    <Compile Include="arg_test.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HARPY.py">
+    <Compile Include="harpy.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="extract_featuresV3.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="exec_test.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

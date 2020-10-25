@@ -1,4 +1,4 @@
-# HARPY Joy JSON Feature Extraction V3.2b
+# HARPY Joy JSON Feature Extraction V3.3b
 #
 # Designed by: Selman Tabet
 #
@@ -9,6 +9,8 @@
 # - Compartmentalized MAC mapper and extract feature functions under separate function definitions rather than a single script.
 # - Execution may now be done via CLI by calling HARPY.py and adding the required arguments. Pass parameter -h or --help for details.
 # - Improved path concatenation for POSIX/NT interoperability.
+# - Unresolved RDAP queries will be stored in the WHOIS record to prevent further failed lookups.
+# - WHOIS record is now stored as a JSON dump to improve efficiency.
 #
 
 import os
@@ -17,6 +19,7 @@ import datetime
 import csv
 import sys
 import pandas as pd
+import json
 from ipwhois import IPWhois
 '''
 Features List:
@@ -63,7 +66,11 @@ def extract_features(path, interval_time): # Installation path and and integer i
     features_writer.writerow(['total_sleep_time', 'total_active_time', 'total_flow_volume', 'flow_rate', 'avg_packet_size', 'num_servers', 'num_protocols', 'uniq_dns', 'dns_interval', 'ntp_interval', 'device_co', 'rdap_asn'])
     overall_ports_dict = {}
     overall_dns_dict = {}
-    whois_record = {}
+    with open(os.path.join(app_directory, 'json_files', 'whois_record.json')) as f:
+        whois_record = json.load(f)
+    
+    print(type(whois_record))
+    print(whois_record)
 
     for device_co in range(1, 32):    
         # Process all days for device_co
@@ -147,14 +154,18 @@ def extract_features(path, interval_time): # Installation path and and integer i
                 # Get the server and WHOIS Record
                 if port != 53 and port != 123:
                     server = flow_data['da']
+                    print("Inspecting IP: " + server)
                     if server not in whois_record:
                         try:
                             ip_query = IPWhois(server)
                             RDAP = ip_query.lookup_rdap(depth=1)
                             server_id = RDAP["asn_description"]
                             whois_record[server] = server_id
+                            #print("New IP resolved as " + server_id)
                         except:
+                            #print("Not resolved...")
                             server_id = "Not Resolved"
+                            whois_record[server] = server_id #Though technically inaccurate, this would prevent further failed lookups.
                     else:
                         server_id = whois_record[server]
 
@@ -230,6 +241,8 @@ def extract_features(path, interval_time): # Installation path and and integer i
 
 
     features_csv.close()
+    with open(os.path.join(app_directory, 'json_files', 'whois_record.json'), 'w') as f:
+        json.dump(whois_record, f)
     return features_file_name
 
 
