@@ -52,7 +52,7 @@ NTP interval: total time for using NTP
 4- Make sure only one day_co loop out of the 3 loops is commented out (1-21 for 2016, 21-48 for 2018, 1-48 for all)
 '''
 
-interval_time = 7 #Time in minutes
+interval_time = 20 #Time in minutes
 
 print("Selected time interval: " + str(interval_time))
 period_time = 60 * interval_time  # seconds

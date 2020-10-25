@@ -1,4 +1,4 @@
-# HARPY Joy JSON Feature Extraction V3.1b
+# HARPY Joy JSON Feature Extraction V3.2b
 #
 # Designed by: Selman Tabet
 #
@@ -6,10 +6,12 @@
 #
 # [CODE]
 #
-# - Compartmentalized MAC mapper and extract feature functions
-# - Execution may now be done via CLI by calling HARPY.py
+# - Compartmentalized MAC mapper and extract feature functions under separate function definitions rather than a single script.
+# - Execution may now be done via CLI by calling HARPY.py and adding the required arguments. Pass parameter -h or --help for details.
+# - Improved path concatenation for POSIX/NT interoperability.
 #
 
+import os
 import json
 import datetime
 import csv
@@ -31,6 +33,8 @@ Average Packet Size (number of bytes sent/received / number of packets sent/reci
 ---------------------------------------------------------------------------------------
 Number of servers (excluding DNS (53) and NTP (123))
 ---------------------------------------------------------------------------------------
+RDAP Registration Name along with number of flows for each resolved name. Stored as dict.
+---------------------------------------------------------------------------------------
 Number of protocols (based on destination port number)
 ---------------------------------------------------------------------------------------
 Number of unique DNS requests. (based on qn and rn in joy tool)
@@ -50,7 +54,7 @@ def extract_features(path, interval_time): # Installation path and and integer i
     print("Selected time interval: " + str(interval_time) + " minutes")
     period_time = 60 * interval_time  #Convert from minutes to seconds
     app_directory = path
-    features_file_name = app_directory + '/csv_files/output_'+ str(interval_time) + 'm.csv'
+    features_file_name = os.path.join(app_directory, 'csv_files', 'output_' + str(interval_time) + 'm.csv')
 
     # Prepare writer to write extracted features for device_co
     features_csv = open(features_file_name, 'w')
@@ -68,7 +72,7 @@ def extract_features(path, interval_time): # Installation path and and integer i
         #for day_co in range(21, 48):   # for 2018 dataset
         #for day_co in range(1, 48):    # for 2016+2018 dataset
             # Read flows from flows file containing 1 day data
-            flows_file_name = app_directory + '/json_files/' + str(day_co) + '_' + str(device_co) + '.json'
+            flows_file_name = os.path.join(app_directory, 'json_files', str(day_co) + '_' + str(device_co) + '.json')
             print('Processing ' + flows_file_name + ' ...')
             flows_file = open(flows_file_name, 'r')
             flows = flows_file.readlines()
@@ -241,9 +245,6 @@ def mac_map(mac_source, mac_target, output):
     print("Done.")
     return 0
 
-#app_directory + '/csv_files/ListCSV.csv'
-#app_directory + '/csv_files/unsw_dataset_features_'+ str(interval_time) + 'm.csv'
-#app_directory + "/csv_files/unsw_dataset_features_mapped_"+ str(interval_time) + "m.csv"
 '''
 stats_csv = open(stats_file_name, 'w')
 stats_writer = csv.writer(stats_csv, delimiter=',')
