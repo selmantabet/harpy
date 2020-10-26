@@ -1,17 +1,31 @@
-# HARPY Joy JSON Feature Extraction V3.3b
+# HARPY Joy JSON Feature Extraction V3.4
 #
-# Designed by: Selman Tabet
+# Created by: Selman Tabet (@selmantabet - https://selman.io/)
+# Special thanks to Dr. Ihab Mohammed from Western Illinois University for showing me the original design that inspired the structure of this Python module.
 #
-# Changelog:
+# Changelog: V3.4 - Compartmentalization and Optimization Update
 #
 # [CODE]
 #
 # - Compartmentalized MAC mapper and extract feature functions under separate function definitions rather than a single script.
-# - Execution may now be done via CLI by calling HARPY.py and adding the required arguments. Pass parameter -h or --help for details.
-# - Improved path concatenation for POSIX/NT interoperability.
-# - Unresolved RDAP queries will be stored in the WHOIS record to prevent further failed lookups.
+# - Execution may now be done via CLI by calling harpy.py and adding the required arguments. Pass parameter -h or --help for details.
+# - Improved path concatenation methods for POSIX/NT interoperability.
+# - Unresolved RDAP queries will be stored in WHOIS record in order to prevent further failed lookup attempts.
 # - WHOIS record is now stored as a JSON dump to improve efficiency.
+#    ~ WHOIS records are not static, but one can clear the JSON file whenever they need to update registries.
+# - RDAP requests would timeout and be marked "Not Resolved" in order to reduce the amount of wasted queries.
+# - Some code cleanup, file reorganization and style improvements.
+# - Added a little acknowledgement message :)
 #
+# 
+# [ROADMAP]
+#
+# * Next Beta branch, in anticipation of new datasets: 
+#     ~ Have harpy.py output the number of MACs in ListCSV.csv
+#     ~ This would help in adding an extract_features argument for number of distinct MAC devices.
+#     ~ New Python script may be developed to call cisco/joy for all MACs in ListCSV.csv, but this would limit the execution environment to POSIX
+#     due to the potential usage of os.system(joy <args>), unless the user has "joy" cmd(let) somehow defined on their NT system.
+# 
 
 import os
 import json
@@ -36,7 +50,7 @@ Average Packet Size (number of bytes sent/received / number of packets sent/reci
 ---------------------------------------------------------------------------------------
 Number of servers (excluding DNS (53) and NTP (123))
 ---------------------------------------------------------------------------------------
-RDAP Registration Name along with number of flows for each resolved name. Stored as dict.
+RDAP/WHOIS Registration Name along with number of flows for each resolved name. Stored as dict.
 ---------------------------------------------------------------------------------------
 Number of protocols (based on destination port number)
 ---------------------------------------------------------------------------------------
@@ -46,18 +60,12 @@ DNS Interval: total time for using DNS
 NTP interval: total time for using NTP
 '''
 
-'''
-1- Select the period
-2- Select the input file (2016, 2018, or all)
-3- Add an extension to the input file name to indicate the period such as _1Min, _10Min, and so on.
-4- Make sure only one day_co loop out of the 3 loops is commented out (1-21 for 2016, 21-48 for 2018, 1-48 for all)
-'''
 
 def extract_features(path, interval_time): # Installation path and and integer interval length in minutes.
     print("Selected time interval: " + str(interval_time) + " minutes")
-    period_time = 60 * interval_time  #Convert from minutes to seconds
+    period_time = 60 * interval_time  # Convert from minutes to seconds
     app_directory = path
-    features_file_name = os.path.join(app_directory, 'csv_files', 'output_' + str(interval_time) + 'm.csv')
+    features_file_name = os.path.join(app_directory, 'csv_files', 'output_' + str(interval_time) + 'm.csv') # Output file is output_<time>m.csv
 
     # Prepare writer to write extracted features for device_co
     features_csv = open(features_file_name, 'w')
@@ -68,14 +76,10 @@ def extract_features(path, interval_time): # Installation path and and integer i
     overall_dns_dict = {}
     with open(os.path.join(app_directory, 'json_files', 'whois_record.json')) as f:
         whois_record = json.load(f)
-    
-    print(type(whois_record))
-    print(whois_record)
 
     for device_co in range(1, 32):    
         # Process all days for device_co
-        #for day_co in range(1, 6):
-        for day_co in range(1, 21):     # for 2016 dataset
+        for day_co in range(1, 21):
             # Read flows from flows file containing 1 day data
             flows_file_name = os.path.join(app_directory, 'json_files', str(day_co) + '_' + str(device_co) + '.json')
             print('Processing ' + flows_file_name + ' ...')
@@ -154,20 +158,20 @@ def extract_features(path, interval_time): # Installation path and and integer i
                 # Get the server and WHOIS Record
                 if port != 53 and port != 123:
                     server = flow_data['da']
-                    print("Inspecting IP: " + server)
+                    #print("Inspecting IP: " + server)
                     if server not in whois_record:
                         try:
                             ip_query = IPWhois(server)
-                            RDAP = ip_query.lookup_rdap(depth=1)
-                            server_id = RDAP["asn_description"]
-                            whois_record[server] = server_id
+                            RDAP = ip_query.lookup_rdap(depth=1, rate_limit_timeout=20) # This is to reduce the amount of failed RDAP requests, which would greatly improve execution times over bulk requests.
+                            server_id = RDAP["asn_description"] # From what I've seen, this is the RDAP response key that would most likely be useful.
+                            whois_record[server] = server_id # Store info into WHOIS record.
                             #print("New IP resolved as " + server_id)
                         except:
                             #print("Not resolved...")
                             server_id = "Not Resolved"
-                            whois_record[server] = server_id #Though technically inaccurate, this would prevent further failed lookups.
+                            whois_record[server] = server_id # Though technically inaccurate, storing this IP would prevent further failed WHOIS lookups.
                     else:
-                        server_id = whois_record[server]
+                        server_id = whois_record[server] # The IP was previously looked up, so it's in the WHOIS record.
 
                     if server not in servers_dic:
                         rdap_asn_record[server_id] = 1
@@ -252,7 +256,7 @@ def mac_map(mac_source, mac_target, output):
     mac_src = pd.read_csv(mac_source)
     mapping = pd.read_csv(mac_target)
     mapped = mapping.merge(mac_src, on='device_co', how='left').rename(columns={'MAC Address':'MAC_address'})
-    mapped.to_csv(output,index=False)
+    mapped.to_csv(os.path.join(output, os.path.basename(mac_target).split(".csv")[0] + "_mapped.csv"), index=False)
     print("Done.")
     return 0
 

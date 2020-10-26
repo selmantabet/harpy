@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>20cc3dea-c40b-45f0-8028-5a215843f6d9</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>IPWhoIsTest.py</StartupFile>
+    <StartupFile>tests\IPWhoIsTest.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,23 +22,23 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Junk\extract_features.py" />
-    <Compile Include="Junk\extract_features_mapper_10.py" />
-    <Compile Include="Junk\extract_features_mapper_15.py" />
-    <Compile Include="Junk\extract_features_mapper_30.py" />
+    <Compile Include="junk\extract_features_v2.py" />
+    <Compile Include="junk\extract_features_mapper_v2_10.py" />
+    <Compile Include="junk\extract_features_mapper_v2_15.py" />
+    <Compile Include="junk\extract_features_mapper_v2_30.py" />
     <Compile Include="extract_features.py" />
-    <Compile Include="Junk\extract_features_mapper_5.py" />
-    <Compile Include="IPWhoIsTest.py" />
-    <Compile Include="arg_test.py">
+    <Compile Include="junk\extract_features_mapper_v2_5.py" />
+    <Compile Include="tests\IPWhoIsTest.py" />
+    <Compile Include="tests\arg_test.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="harpy.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="extract_featuresV3.py">
+    <Compile Include="junk\extract_features_v3.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="exec_test.py">
+    <Compile Include="tests\exec_test.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -54,7 +54,8 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Junk\" />
+    <Folder Include="junk\" />
+    <Folder Include="tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
