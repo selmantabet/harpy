@@ -1,7 +1,31 @@
-# HARPY Joy JSON Feature Extraction
+# HARPY Joy JSON Feature Extraction V3.4
 #
 # Created by: Selman Tabet (@selmantabet - https://selman.io/)
-# Special thanks to Dr. Ihab Mohammed from Western Michigan University for showing me the original design that inspired the structure of this Python module.
+# Special thanks to Dr. Ihab Mohammed from Western Illinois University for showing me the original design that inspired the structure of this Python module.
+#
+# Changelog: V3.4 - Compartmentalization and Optimization Update
+#
+# [CODE]
+#
+# - Compartmentalized MAC mapper and extract feature functions under separate function definitions rather than a single script.
+# - Execution may now be done via CLI by calling harpy.py and adding the required arguments. Pass parameter -h or --help for details.
+# - Improved path concatenation methods for POSIX/NT interoperability.
+# - Unresolved RDAP queries will be stored in WHOIS record in order to prevent further failed lookup attempts.
+# - WHOIS record is now stored as a JSON dump to improve efficiency.
+#    ~ WHOIS records are not static, but one can clear the JSON file whenever they need to update registries.
+# - RDAP requests would timeout and be marked "Not Resolved" in order to reduce the amount of wasted queries.
+# - Some code cleanup, file reorganization and style improvements.
+# - Added a little acknowledgement message :)
+#
+# 
+# [ROADMAP]
+#
+# * Next Beta branch, in anticipation of new datasets: 
+#     ~ Have harpy.py output the number of MACs in ListCSV.csv
+#     ~ This would help in adding an extract_features argument for number of distinct MAC devices.
+#     ~ New Python script may be developed to call cisco/joy for all MACs in ListCSV.csv, but this would limit the execution environment to POSIX
+#     due to the potential usage of os.system(joy <args>), unless the user has "joy" cmd(let) somehow defined on their NT system.
+# 
 
 import os
 import json

@@ -3,7 +3,7 @@ from pprint import pprint
 
 try:
     print("Started...")
-    ip_query = IPWhois('8.8.8.8')
+    ip_query = IPWhois('1.1.1.1')
     print("IPWHOis setup...")
     RDAP = ip_query.lookup_rdap(depth=1, rate_limit_timeout = 10)
     print("Lookup successful...")

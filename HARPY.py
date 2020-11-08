@@ -1,3 +1,46 @@
+#          
+#
+#             PROJECT HARPY - HBKU Final Year Project
+#
+#    Data Collection, Preprocessing and Launcher Developer: Selman Tabet
+#    Machine Learning Developer: Mohamed Amara
+#    Frontend and App Developer: Omar Elshal
+#    Supervisor: Dr. Ala Al-Fuqaha
+#
+#
+
+# ---- Prerequisite file structure ----
+# - Harpy directory                 // Main app directory (MANDATORY, most essential argument to be provided via CLI unless already cd'd to it)
+# |_  /pcap_files/                  // Capture files (MANDATORY - for Joy Tool Shell Script)
+# |_  /csv_files/                   // (Default) Output of the feature extraction script (MANDATORY)
+# |     |_  ListCSV.csv             // List of MAC addresses (Optional iff the absolute path was provided via CLI)
+# |_  /json_files/                  // Where Joy JSON output is stored (MANDATORY)
+#       |_  whois_record.json       // For RDAP requests in extract_features.py (MANDATORY)
+#
+# DO NOT RUN UNLESS THE MANDATORY FILES AND FOLDERS IN THE FILE TREE ARE COMPLETE
+#
+#
+#
+# Changelog: HARPY V3.4.2 - Style Update.
+#
+# [STYLE]
+# - Moved changelog to harpy.py
+# - Additional harpy.py Launcher styling.
+# 
+#
+# [ROADMAP]
+#
+# * Next Beta branch, in anticipation of new datasets: 
+#     ~ Have harpy.py output the number of MACs in ListCSV.csv, this would be handed over to extract_features as an argument that goes directly
+#     to the device_co for loop to avoid hardcoding values.
+#     ~ For the same reason previously stated, the number of capture files needs to be calculated so that the value in the days_co for loop may
+#     be dynamically adjusted for the files in /pcap_files/ directory.
+#     ~ New Python script may be developed to call cisco/joy for all MACs in ListCSV.csv, but this would limit the execution environment to POSIX
+#     due to the potential usage of os.system(joy <args>), unless the user has "joy" cmd(let) somehow defined on their NT system.
+#     ~ In the event that the WHOIS Record was found to be outdated, it shall be cleared and rebuilt to address concerns with outdated registries.
+#
+#
+
 import argparse
 import os
 import extract_features as extract
