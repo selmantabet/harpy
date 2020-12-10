@@ -1,6 +1,6 @@
 #          
 #
-#             PROJECT HARPY - HBKU Final Year Project
+#             PROJECT HARPY - Backend Service - HBKU Final Year Project
 #
 #    Data Collection, Preprocessing and Launcher Developer: Selman Tabet
 #    Machine Learning Developer: Mohamed Amara
@@ -21,11 +21,11 @@
 #
 #
 #
-# Changelog: HARPY V3.4.2 - Style Update.
+# Changelog: HARPY V4.0 - Machine Learning and Frontend Update.
 #
-# [STYLE]
-# - Moved changelog to harpy.py
-# - Additional harpy.py Launcher styling.
+# [CODE]
+#   - Added Frontend code (written in React Native).
+#   - Added Machine Learning Module for training and classification.
 # 
 #
 # [ROADMAP]
