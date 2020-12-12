@@ -24,7 +24,7 @@
 # Changelog: HARPY V4.0 - Machine Learning and Frontend Update.
 #
 # [CODE]
-#   - Added Frontend code (written in React Native).
+#   - Added Frontend code (using React Native framework).
 #   - Added Machine Learning Module for training and classification.
 # 
 #
